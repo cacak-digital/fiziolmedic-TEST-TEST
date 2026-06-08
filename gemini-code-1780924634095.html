@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fizio L Medic | Premium Fizikalna Terapija & Estetika</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --medical-blue: #0B3B60;
+            --electric-blue: #007BFF;
+            --soft-blue: #E1F0FF;
+            --glow-blue: rgba(0, 123, 255, 0.15);
+            --accent-green: #20C997;
+            --accent-pink: #FFB6C1;
+            --white: #FFFFFF;
+            --bg-light: #F4F8FC;
+            --text-dark: #1E293B;
+            --text-gray: #64748B;
+            --card-glass: rgba(255, 255, 255, 0.75);
+            --border-glass: rgba(255, 255, 255, 0.5);
+            --radius-premium: 24px;
+            --transition-bounce: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            --transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* --- Custom Scrollbar --- */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg-light); }
+        ::-webkit-scrollbar-thumb { background: var(--medical-blue); border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--electric-blue); }
+
+        /* --- Reusable Animations --- */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 123, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); }
+        }
+
+        @keyframes waveBg {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Scroll Reveal Utility */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: var(--transition-smooth);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Floating Decorative Elements --- */
+        .petal {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, var(--accent-pink), #FFE4E1);
+            border-radius: 0 70% 0 70%;
+            opacity: 0.4;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        /* --- Premium Navigation --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 8%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-glass);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: var(--medical-blue);
+            letter-spacing: -0.5px;
+        }
+
+        .logo-icon-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: var(--medical-blue);
+            border-radius: 12px;
+            color: var(--white);
+            transition: var(--transition-bounce);
+        }
+
+        .logo:hover .logo-icon-wrapper {
+            transform: rotate(10deg);
+            background: var(--electric-blue);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 35px;
+        }
+
+        .nav-links a {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: var(--transition-smooth);
+        }
+
+        .nav-links a:hover, .nav-links a.active-nav {
+            color: var(--electric-blue);
+            background: var(--soft-blue);
+        }
+
+        .menu-btn { display: none; font-size: 1.5rem; cursor: pointer; color: var(--medical-blue); }
+
+        /* --- Hero Section --- */
+        .hero {
+            position: relative;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            min-height: 90vh;
+            padding: 0 8%;
+            align-items: center;
+            gap: 40px;
+            background: radial-gradient(circle at 80% 20%, #E6F0FA 0%, var(--bg-light) 50%);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: linear-gradient(var(--soft-blue), rgba(255,255,255,0));
+            border-radius: 45%;
+            top: -20%; right: -10%;
+            animation: waveBg 20s linear infinite;
+            opacity: 0.5;
+            z-index: 0;
+        }
+
+        .hero-content { position: relative; z-index: 2; }
+
+        .tagline {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--white);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--electric-blue);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            margin-bottom: 25px;
+            border: 1px solid var(--border-glass);
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--medical-blue);
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+            margin-bottom: 25px;
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, var(--medical-blue), var(--electric-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+        .cta-group { display: flex; gap: 20px; align-items: center; }
+
+        .btn-premium {
+            padding: 18px 38px;
+            background: linear-gradient(135deg, var(--medical-blue), var(--electric-blue));
+            color: var(--white);
+            font-weight: 700;
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(0, 123, 255, 0.3);
+            transition: var(--transition-bounce);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-premium:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 123, 255, 0.4);
+        }
+
+        .btn-secondary {
+            padding: 18px 38px;
+            background: var(--white);
+            color: var(--medical-blue);
+            font-weight: 700;
+            border-radius: 14px;
+            border: 1px solid rgba(11, 59, 96, 0.1);
+            transition: var(--transition-smooth);
+        }
+
+        .btn-secondary:hover {
+            background: var(--soft-blue);
+            color: var(--electric-blue);
+        }
+
+        .hero-image-container {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+        }
+
+        .hero-img-card {
+            width: 100%;
+            height: 550px;
+            background: url('https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80') center/cover;
+            border-radius: var(--radius-premium);
+            box-shadow: 0 30px 60px rgba(11, 59, 96, 0.15);
+            position: relative;
+            border: 4px solid var(--white);
+        }
+
+        /* Floating badge over image */
+        .floating-badge {
+            position: absolute;
+            bottom: 30px;
+            left: -30px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid var(--border-glass);
+            animation: float 5s ease-in-out infinite;
+        }
+
+        .badge-icon {
+            width: 45px; height: 45px; background: var(--accent-green);
+            border-radius: 50%; color: white; display: flex; justify-content: center; align-items: center;
+            font-size: 1.2rem;
+        }
+
+        /* --- Trust Stats Section --- */
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            background: var(--white);
+            padding: 40px 5%;
+            margin: -50px 8% 0;
+            border-radius: var(--radius-premium);
+            box-shadow: 0 20px 50px rgba(11, 59, 96, 0.05);
+            position: relative;
+            z-index: 10;
+            border: 1px solid var(--border-glass);
+        }
+
+        .stat-item { text-align: center; }
+        .stat-number { font-size: 2.5rem; font-weight: 800; color: var(--medical-blue); }
+        .stat-label { font-size: 0.9rem; color: var(--text-gray); font-weight: 600; }
+
+        /* --- Interactive Showcase Section --- */
+        .showcase { padding: 120px 8%; }
+
+        .section-title-area {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+
+        .section-title-area h2 {
+            font-size: 2.8rem;
+            color: var(--medical-blue);
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .grid-showcase {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+
+        .column-title {
+            font-size: 1.6rem;
+            color: var(--medical-blue);
+            margin-bottom: 30px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Medical List with dynamic hover and active glow */
+        .medical-interactive-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .medical-item {
+            background: var(--card-glass);
+            border: 1px solid var(--border-glass);
+            padding: 25px;
+            border-radius: 20px;
+            display: flex;
+            gap: 20px;
+            cursor: pointer;
+            transition: var(--transition-bounce);
+        }
+
+        .medical-item:hover {
+            transform: scale(1.02) translateX(10px);
+            background: var(--white);
+            box-shadow: 0 15px 35px var(--glow-blue);
+            border-color: var(--electric-blue);
+        }
+
+        .med-icon {
+            width: 55px; height: 55px; background: var(--soft-blue);
+            border-radius: 14px; color: var(--electric-blue);
+            display: flex; justify-content: center; align-items: center;
+            font-size: 1.4rem; transition: var(--transition-smooth);
+        }
+
+        .medical-item:hover .med-icon {
+            background: var(--electric-blue);
+            color: var(--white);
+            animation: pulseGlow 1.5s infinite;
+        }
+
+        /* Aesthetic Cards with Glassmorphism Overlays */
+        .aesthetic-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 35px;
+        }
+
+        .premium-card {
+            position: relative;
+            border-radius: var(--radius-premium);
+            overflow: hidden;
+            height: 260px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            border: 4px solid var(--white);
+            transition: var(--transition-smooth);
+        }
+
+        .card-bg-1 { background: url('https://images.unsplash.com/photo-1615286576624-6ddc5d57d710?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80') center/cover; }
+        .card-bg-2 { background: url('https://images.unsplash.com/photo-1519823551278-64ac92734fb1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80') center/cover; }
+
+        .premium-card-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(11, 59, 96, 0.85) 20%, rgba(11, 59, 96, 0.1));
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 35px;
+            transition: var(--transition-smooth);
+        }
+
+        .premium-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 50px rgba(11, 59, 96, 0.2);
+        }
+
+        .premium-card:hover .premium-card-overlay {
+            background: linear-gradient(to top, rgba(0, 123, 255, 0.9) 30%, rgba(11, 59, 96, 0.2));
+        }
+
+        .premium-card h4 { color: var(--white); font-size: 1.5rem; margin-bottom: 8px; font-weight: 700; }
+        .premium-card p { color: rgba(255,255,255,0.8); font-size: 0.95rem; opacity: 0; transform: translateY(10px); transition: var(--transition-smooth); }
+        .premium-card:hover p { opacity: 1; transform: translateY(0); }
+
+        /* --- Packages & Offers (Creative Transformation) --- */
+        .packages-section {
+            padding: 120px 8%;
+            background: linear-gradient(180deg, var(--bg-light) 0%, #EBF3FC 100%);
+            position: relative;
+        }
+
+        .packages-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 35px;
+            align-items: center;
+        }
+
+        .pack-card {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid var(--border-glass);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-premium);
+            padding: 45px 35px;
+            text-align: center;
+            transition: var(--transition-bounce);
+            position: relative;
+        }
+
+        .pack-card:hover {
+            transform: translateY(-15px);
+            background: var(--white);
+            box-shadow: 0 30px 60px rgba(11, 59, 96, 0.1);
+        }
+
+        .pack-badge {
+            position: absolute;
+            top: 25px; right: 25px;
+            padding: 6px 14px; background: var(--soft-blue);
+            color: var(--electric-blue); font-size: 0.75rem; font-weight: 800;
+            border-radius: 20px; text-transform: uppercase;
+        }
+
+        .pack-card.featured {
+            background: linear-gradient(135deg, #0B3B60 0%, #061F34 100%);
+            color: var(--white);
+            padding: 60px 35px;
+            box-shadow: 0 20px 50px rgba(11, 59, 96, 0.2);
+            border: none;
+        }
+        
+        .pack-card.featured .pack-badge {
+            background: var(--electric-blue); color: white;
+        }
+
+        .pack-card.featured:hover {
+            box-shadow: 0 35px 70px rgba(0, 123, 255, 0.3);
+        }
+
+        .pack-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 15px; }
+        .pack-price { font-size: 3rem; font-weight: 800; color: var(--medical-blue); margin-bottom: 5px; }
+        .pack-card.featured .pack-price { color: var(--white); }
+        .pack-subtitle { font-size: 0.9rem; color: var(--text-gray); margin-bottom: 35px; font-weight: 600; }
+        .pack-card.featured .pack-subtitle { color: #A0B2C4; }
+
+        .pack-features { text-align: left; margin-bottom: 40px; }
+        .pack-features li { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; font-size: 0.95rem; font-weight: 500; }
+        .pack-features i { color: var(--electric-blue); font-size: 1.1rem; }
+        .pack-card.featured .pack-features i { color: var(--accent-green); }
+
+        /* --- Footer & Ultra-Modern Form --- */
+        footer {
+            background: #04111C;
+            color: var(--white);
+            padding: 100px 8% 40px;
+            position: relative;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr 1fr;
+            gap: 60px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding-bottom: 60px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo { font-size: 1.6rem; font-weight: 800; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
+        .footer-logo i { color: var(--electric-blue); }
+        .footer-about p { color: #8E9FAA; font-size: 0.95rem; line-height: 1.7; }
+
+        .footer-links h4, .footer-contact h4 { font-size: 1.2rem; margin-bottom: 30px; font-weight: 700; color: #F1F5F9; }
+        .footer-links ul li { margin-bottom: 15px; }
+        .footer-links ul li a { color: #8E9FAA; transition: var(--transition-smooth); font-weight: 500; }
+        .footer-links ul li a:hover { color: var(--electric-blue); padding-left: 8px; }
+
+        .contact-list li { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; color: #8E9FAA; font-weight: 500; }
+        .contact-list i { color: var(--electric-blue); font-size: 1.2rem; }
+
+        /* Neo Google Map Block */
+        .map-wrapper {
+            border-radius: 16px; overflow: hidden; height: 180px; margin-top: 25px;
+            position: relative; border: 1px solid rgba(255,255,255,0.1);
+            background: url('https://images.unsplash.com/photo-1524661135-423995f22d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80') center/cover;
+        }
+        .map-glow-overlay {
+            position: absolute; inset: 0; background: rgba(4, 17, 28, 0.7);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: var(--transition-smooth); cursor: pointer;
+        }
+        .map-wrapper:hover .map-glow-overlay { background: rgba(0, 123, 255, 0.4); }
+
+        .social-circle-links { display: flex; gap: 15px; margin-top: 30px; }
+        .social-circle-links a {
+            width: 45px; height: 45px; background: rgba(255,255,255,0.05); border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; color: white; transition: var(--transition-bounce);
+        }
+        .social-circle-links a:hover { background: var(--electric-blue); transform: translateY(-5px); }
+
+        .copyright { text-align: center; color: #576875; font-size: 0.85rem; font-weight: 500; }
+
+        /* --- Responsive Adaptation --- */
+        @media (max-width: 1200px) {
+            .hero-title { font-size: 3.2rem; }
+            .packages-grid { grid-template-columns: repeat(2, 1fr); gap: 30px; }
+            .pack-card.featured { order: -1; grid-column: span 2; }
+        }
+
+        @media (max-width: 992px) {
+            .hero { grid-template-columns: 1fr; text-align: center; padding-top: 60px; }
+            .hero-title { max-width: 100%; }
+            .hero-subtitle { margin: 0 auto 40px; }
+            .cta-group { justify-content: center; }
+            .hero-image-container { display: none; } /* Hide heavy container on tablet for canvas stacking */
+            .grid-showcase { grid-template-columns: 1fr; gap: 60px; }
+            .stats-bar { flex-direction: column; gap: 30px; margin-top: 40px; }
+            .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 20px 5%; }
+            .nav-links { display: none; } /* Can be toggled with JS active class if expanded */
+            .menu-btn { display: block; }
+            .packages-grid { grid-template-columns: 1fr; }
+            .pack-card.featured { grid-column: span 1; }
+            .hero-title { font-size: 2.6rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="petal" style="top: 25%; left: 5%; animation-delay: 0s;"></div>
+    <div class="petal" style="top: 75%; left: 85%; animation-delay: 2s; width: 15px; height: 15px;"></div>
+    <div class="petal" style="top: 45%; left: 90%; animation-delay: 4s; width: 25px; height: 25px;"></div>
+
+    <nav>
+        <div class="logo">
+            <div class="logo-icon-wrapper">
+                <i class="fa-solid fa-hands-holding-child"></i>
+            </div>
+            FIZIO L MEDIC
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#home" class="active-nav">Početna</a></li>
+            <li><a href="#terapije">Fizikalna Terapija</a></li>
+            <li><a href="#estetika">Estetika tela</a></li>
+            <li><a href="#paketi">Paketi i Cene</a></li>
+            <li><a href="#kontakt">Kontakt</a></li>
+        </ul>
+        <i class="fa-solid fa-bars-staggered menu-btn" onclick="toggleMenu()"></i>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-content reveal active">
+            <div class="tagline">
+                <i class="fa-solid fa-circle-check"></i> Najmodernija oprema u regionu
+            </div>
+            <h1 class="hero-title">Vaš put do <span>zdravlja</span> i savršene <span>lepote</span>.</h1>
+            <p class="hero-subtitle">Mesto gde vrhunska naučna fizikalna terapija susreće najnaprednije estetske tretmane za oblikovanje tela.</p>
+            <div class="cta-group">
+                <a href="#kontakt" class="btn-premium">Zakažite odmah <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="#paketi" class="btn-secondary">Pogledaj pakete</a>
+            </div>
+        </div>
+        <div class="hero-image-container reveal active" style="transition-delay: 0.2s;">
+            <div class="hero-img-card">
+                <div class="floating-badge">
+                    <div class="badge-icon"><i class="fa-solid fa-heart-pulse"></i></div>
+                    <div>
+                        <h4 style="font-size: 1rem; color: var(--medical-blue);">Sertifikovani tim</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-gray); opacity: 1; transform: none;">Lekari i viši terapeuti</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="stats-bar reveal">
+        <div class="stat-item">
+            <div class="stat-number">5000+</div>
+            <div class="stat-label">Zadovoljnih klijenata</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">Posvećenost oporavku</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">12+</div>
+            <div class="stat-label">Najsavremenijih aparata</div>
+        </div>
+    </div>
+
+    <section class="showcase" id="terapije">
+        <div class="section-title-area reveal">
+            <h2 class="section-title">Naše Ekspertize & Usluge</h2>
+            <p style="color: var(--text-gray); margin-top: 15px;">Izaberite vrhunski tretman prilagođen vašim jedinstvenim potrebama</p>
+        </div>
+
+        <div class="grid-showcase">
+            <div class="reveal">
+                <h3 class="column-title"><i class="fa-solid fa-stethoscope"></i> Savremena Fizikalna Terapija</h3>
+                <div class="medical-interactive-list">
+                    <div class="medical-item">
+                        <div class="med-icon"><i class="fa-solid fa-wave-square"></i></div>
+                        <div>
+                            <h4 style="color: var(--medical-blue); margin-bottom: 5px;">Terapijski Ultrazvuk</h4>
+                            <p style="color: var(--text-gray); font-size: 0.9rem;">Ubrzava proces zarastanja tetiva i mišića mikromasažom tkiva.</p>
+                        </div>
+                    </div>
+                    <div class="medical-item">
+                        <div class="med-icon"><i class="fa-solid fa-bolt-lightning"></i></div>
+                        <div>
+                            <h4 style="color: var(--medical-blue); margin-bottom: 5px;">Visokokvalitetna Elektroterapija</h4>
+                            <p style="color: var(--text-gray); font-size: 0.9rem;">Trenutno smanjenje bola i uspešna stimulacija neuro-mišićnih struktura.</p>
+                        </div>
+                    </div>
+                    <div class="medical-item">
+                        <div class="med-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                        <div>
+                            <h4 style="color: var(--medical-blue); margin-bottom: 5px;">Normatec Presoterapija</h4>
+                            <p style="color: var(--text-gray); font-size: 0.9rem;">Sistem kompresije za brzu eliminaciju toksina i ekstremni oporavak.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal" id="estetika" style="transition-delay: 0.2s;">
+                <h3 class="column-title"><i class="fa-solid fa-wand-sparkles"></i> Estetika & Oblikovanje Tela</h3>
+                <div class="aesthetic-grid">
+                    <div class="premium-card card-bg-1">
+                        <div class="premium-card-overlay">
+                            <h4>Anticelulit Masaža (Maderoterapija)</h4>
+                            <p>Ekskluzivna tehnika drvenim elementima koja redefiniše konture tela i uklanja čak i najuporniji celulit.</p>
+                        </div>
+                    </div>
+                    <div class="premium-card card-bg-2">
+                        <div class="premium-card-overlay">
+                            <h4>Ultrazvučna Kavitacija</h4>
+                            <p>Moćan neinvazivni tretman koji direktno cilja i trajno razbija lokalizovane masne ćelije na stomaku i bokovima.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="packages-section" id="paketi">
+        <div class="section-title-area reveal">
+            <h2>Ekskluzivni Paketi Tretmana</h2>
+            <p style="color: var(--text-gray); margin-top: 15px;">Investirajte u dugoročne i vidljive rezultate po specijalnim cenama.</p>
+        </div>
+
+        <div class="packages-grid">
+            <div class="pack-card reveal">
+                <div class="pack-badge">Popularno</div>
+                <h3 class="pack-title">BASIC PAKET</h3>
+                <div class="pack-price">6,900<span style="font-size: 1.2rem;">RSD</span></div>
+                <div class="pack-subtitle">Sadrži 6 ciljanih tretmana</div>
+                <ul class="pack-features">
+                    <li><i class="fa-solid fa-circle-check"></i> 3x Anticelulit masaža</li>
+                    <li><i class="fa-solid fa-circle-check"></i> 2x Vakum terapija</li>
+                    <li><i class="fa-solid fa-circle-check"></i> 1x Ultrazvuk tkiva</li>
+                </ul>
+                <a href="#kontakt" class="btn-secondary" style="display: block; text-align: center;">Zakaži paket</a>
+            </div>
+
+            <div class="pack-card featured reveal" style="transition-delay: 0.1s;">
+                <div class="pack-badge">Najbolji efekat</div>
+                <h3 class="pack-title">PREMIUM BODY PAKET</h3>
+                <div class="pack-price">15,900<span style="font-size: 1.2rem; color: #fff;">RSD</span></div>
+                <div class="pack-subtitle">Sadrži 15 kompletnih tretmana</div>
+                <ul class="pack-features">
+                    <li><i class="fa-solid fa-star" style="color: gold;"></i> 5x Anticelulit masaža</li>
+                    <li><i class="fa-solid fa-star" style="color: gold;"></i> 4x Maderoterapija</li>
+                    <li><i class="fa-solid fa-star" style="color: gold;"></i> 3x Vakum terapija</li>
+                    <li><i class="fa-solid fa-star" style="color: gold;"></i> 3x Ultrazvučna kavitacija</li>
+                </ul>
+                <a href="#kontakt" class="btn-premium" style="display: flex; justify-content: center; background: var(--white); color: var(--medical-blue); box-shadow: none;">Zakaži Premium Paket</a>
+            </div>
+
+            <div class="pack-card reveal" style="transition-delay: 0.2s;">
+                <h3 class="pack-title">FIT PAKET</h3>
+                <div class="pack-price">10,900<span style="font-size: 1.2rem;">RSD</span></div>
+                <div class="pack-subtitle">Sadrži 10 intenzivnih tretmana</div>
+                <ul class="pack-features">
+                    <li><i class="fa-solid fa-circle-check" style="color: var(--accent-green);"></i> 4x Anticelulit masaža</li>
+                    <li><i class="fa-solid fa-circle-check" style="color: var(--accent-green);"></i> 3x Maderoterapija</li>
+                    <li><i class="fa-solid fa-circle-check" style="color: var(--accent-green);"></i> 2x Vakum terapija</li>
+                    <li><i class="fa-solid fa-circle-check" style="color: var(--accent-green);"></i> 1x Ultrazvuk</li>
+                </ul>
+                <a href="#kontakt" class="btn-secondary" style="display: block; text-align: center;">Zakaži paket</a>
+            </div>
+        </div>
+    </section>
+
+    <footer id="kontakt">
+        <div class="footer-grid">
+            <div class="footer-about">
+                <div class="footer-logo">
+                    <i class="fa-solid fa-hands-holding-child"></i> FIZIO L MEDIC
+                </div>
+                <p>Naša misija je oslobađanje od bola, kompletna regeneracija tela i podizanje vašeg samopouzdanja na viši nivo kroz naučno proverene metode i vrhunsku negu.</p>
+                <div class="social-circle-links">
+                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <h4>Navigacija</h4>
+                <ul>
+                    <li><a href="#home">Početna</a></li>
+                    <li><a href="#terapije">Fizikalna Terapija</a></li>
+                    <li><a href="#estetika">Estetika Tela</a></li>
+                    <li><a href="#paketi">Cenovnik / Paketi</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-contact">
+                <h4>Kontakt Centar</h4>
+                <ul class="contact-list">
+                    <li><i class="fa-solid fa-phone"></i> 064 412 9999</li>
+                    <li><i class="fa-solid fa-phone"></i> 061 281 2837</li>
+                    <li><i class="fa-solid fa-phone-flip"></i> 032 357 111</li>
+                    <li><i class="fa-solid fa-envelope"></i> info@fiziolmedic.rs</li>
+                </ul>
+                <div class="map-wrapper">
+                    <div class="map-glow-overlay">
+                        <i class="fa-solid fa-map-location-dot" style="font-size: 1.5rem; margin-bottom: 8px;"></i>
+                        <span style="font-weight: 600; font-size: 0.9rem;">Beograd, Srbija</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2026 Fizio L Medic. Projektovano za vrhunsko korisničko iskustvo.
+        </div>
+    </footer>
+
+    <script>
+        // Smooth Page Reveal on Scroll
+        window.addEventListener('scroll', () => {
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(reveal => {
+                const windowHeight = window.innerHeight;
+                const revealTop = reveal.getBoundingClientRect().top;
+                const revealPoint = 100;
+
+                if (revealTop < windowHeight - revealPoint) {
+                    reveal.classList.add('active');
+                }
+            });
+        });
+
+        // Simple Mobile Menu Toggle Action
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            if (navLinks.style.display === 'flex') {
+                navLinks.style.display = 'none';
+            } else {
+                navLinks.style.display = 'flex';
+                navLinks.style.flexDirection = 'column';
+                navLinks.style.position = 'absolute';
+                navLinks.style.top = '80px';
+                navLinks.style.left = '0';
+                navLinks.style.width = '100%';
+                navLinks.style.background = 'white';
+                navLinks.style.padding = '20px';
+                navLinks.style.boxShadow = '0 10px 20px rgba(0,0,0,0.05)';
+            }
+        }
+    </script>
+</body>
+</html>
